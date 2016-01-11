@@ -1,0 +1,40 @@
+.media-player {
+	position: relative;
+	display: inline-block;
+}
+
+.media-controls {
+	background: green;
+	position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+.play {
+	margin-top: 8px;
+	margin-bottom: 8px;
+	margin-left: 18px;
+
+	width: 30px;
+	height: 30px;
+	background: url(../images/pause.png);
+}
+
+.play::before {
+	content: '';
+    display: block;
+    height: 100%;
+    width: 12px;
+    position: absolute;
+    top: 0;
+    left: -12px;
+}
+
+.media-btn {
+	background-repeat: no-repeat;
+	background-size: 100%;
+    border: 0px;
+    cursor: pointer;
+    outline: 0;
+}

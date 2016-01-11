@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>雲端服務</title>
+        <meta name="description" content="">
+
+        <!-- HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- styles -->
+        <link href="stylesheets/style.css" rel="stylesheet">
+        <link href="stylesheets/mediacontrol.css" rel="stylesheet">
+
+        <link href="http://amp.azure.net/libs/amp/latest/skins/amp-default/azuremediaplayer.min.css" rel="stylesheet">
+        <script src= "http://amp.azure.net/libs/amp/latest/azuremediaplayer.min.js"></script>
+
+        <script>
+          amp.options.flashSS.swf = "http://amp.azure.net/libs/amp/latest/techs/StrobeMediaPlayback.2.0.swf"
+          amp.options.flashSS.plugin = "http://amp.azure.net/libs/amp/latest/techs/MSAdaptiveStreamingPlugin-osmf2.0.swf"
+          amp.options.silverlightSS.xap = "http://amp.azure.net/libs/amp/latest/techs/SmoothStreamingPlayer.xap"
+        </script>
+    </head>
+    <body>
+        <div class="title">
+           <%= title %>
+        </div>
+
+        <div class="media-player">
+            <video id="azuremediaplayer" class="azuremediaplayer amp-default-skin amp-big-play-centered"> </video>
+            <div class="media-controls">
+
+            <button id='play-pause-button' class='media-btn play' onclick='togglePlayPause();'>
+            </button>
+
+            </div>
+        </div>
+  <script>
+
+///
+  (function (amp) {
+
+    amp.plugin('DebugLog', DebugLog);
+
+    function DebugLog(options) {
+        var player = this;
+
+        var log = function (data) { console.log("Azure Media Player Log", data); }
+
+        if (options) {            
+            if (options['logFunction']) {
+                log = options['logFunction'];
+            }
+        }
+
+        init();
+
+        function init() {
+            player.ready(handleReady);
+            player.addEventListener(amp.eventName.error, handleError);
+        }
+
+        function handleReady() {
+
+            player.addEventListener(amp.eventName.loadedmetadata, handleLoadedMetaData);
+
+            var data = {
+                ampVersion: "1.3.0",
+                appName: options['appName'],
+                userAgent: navigator.userAgent,
+                options: {
+                    autoplay: player.options().autoplay,
+                    heuristicProfile: player.options().heuristicProfile,
+                    techOrder: JSON.stringify(player.options().techOrder)
+                }
+            };
+
+            logData("InstanceCreated", 1, data);
+        }
+
+        function handleError() {
+            var err = player.error();
+            var data = {
+                sessionId: player.currentSrc(),
+                currentTime: player.currentTime(),
+                code: "0x" + err.code.toString(16),
+                message: err.message
+            };
+
+            logData("Error", 0, data);
+        }
+
+        function handleLoadedMetaData() {
+            player.addEventListener(amp.eventName.playbackbitratechanged, handlePlaybackBitrateChanged);
+            player.addEventListener(amp.eventName.playing, handlePlaying);
+            player.addEventListener(amp.eventName.seeking, handleSeeking);
+            player.addEventListener(amp.eventName.pause, handlePaused);
+            player.addEventListener(amp.eventName.waiting, handleWaiting);
+            player.addEventListener(amp.eventName.ended, handleEnded);
+
+            if (player.audioBufferData()) {
+                player.audioBufferData().addEventListener(amp.bufferDataEventName.downloadfailed, function () {
+
+                    var data = {
+                        sessionId: player.currentSrc(),
+                        currentTime: player.currentTime(),
+                        bufferLevel: player.audioBufferData().bufferLevel,
+                        url: player.audioBufferData().downloadFailed.mediaDownload.url,
+                        code: "0x" + player.audioBufferData().downloadFailed.code.toString(16),
+                        message: player.audioBufferData().downloadFailed
+                    };
+
+                    logData("DownloadFailed", 0, data);
+                });
+            }
+
+            if (player.videoBufferData()) {
+                player.videoBufferData().addEventListener(amp.bufferDataEventName.downloadfailed, function () {
+
+                    var data = {
+                        sessionId: player.currentSrc(),
+                        currentTime: player.currentTime(),
+                        bufferLevel: player.videoBufferData().bufferLevel,
+                        url: player.videoBufferData().downloadFailed.mediaDownload.url,
+                        code: "0x" + player.videoBufferData().downloadFailed.code.toString(16),
+                        message: player.videoBufferData().downloadFailed
+                    };
+
+                    logData("DownloadFailed", 0, data);
+                });
+            }
+
+            var data = {
+                sessionId: player.currentSrc(),
+                isLive: player.isLive(),
+                duration: player.duration(),
+                tech: player.currentTechName(),
+                protection: ((player.currentProtectionInfo() && player.currentProtectionInfo()[0]) ? player.currentProtectionInfo()[0].type : "clear")
+            };
+
+            logData("PresentationInfo", 1, data);
+        }
+
+        function handlePlaybackBitrateChanged(event) {
+            logData("BitrateChanged", 1, eventData(event));
+        }
+
+        function handleWaiting(event) {
+            logData("Waiting", 0, eventData(event));
+        }
+
+        function handlePlaying(event) {
+            logData("Playing", 1, eventData(event));
+        }
+
+        function handleSeeking(event) {
+            logData("Seeking", 1, eventData(event));
+        }
+
+        function handlePaused(event) {
+            logData("Paused", 1, eventData(event));
+        }
+
+        function handleEnded(event) {
+            logData("Ended", 1, eventData(event));
+        }
+
+        function logData(eventId, level, data) {
+
+            var eventLog = {
+                eventId: eventId,
+                level: level,
+                data: data
+            };
+
+            log(eventLog);
+        }
+
+        function eventData(event) {
+          return {
+              sessionId: player.currentSrc(),
+              currentTime: player.currentTime(),
+              isLive: player.isLive(),
+              event: event.type,
+              presentationTimeInSec: event.presentationTimeInSec,
+              message: event.message ? event.message : ""
+          };
+        }
+    }
+})(amp || (amp = {}));
+  ///
+
+  var mylogFunction = function(data) { console.log(data); };
+  var myOptions = {
+    "nativeControlsForTouch": false,
+    "logo": { "enabled": false },
+    autoplay: true,
+    controls: false,
+    width: "640",
+    height: "400",
+    poster: "",
+    selectTrackByIndex: -1,
+    plugins: {
+          DebugLog: {
+              logFunction: mylogFunction
+          }
+        }
+  };
+  var myPlayer = amp("azuremediaplayer", myOptions);
+
+  
+  myPlayer.src([
+    {src: "http://demosite.streaming.mediaservices.windows.net/5d20899f-7b6f-46e0-bd6f-3e35de1f4b69/file.ism/Manifest", type: "application/vnd.ms-sstr+xml"}, 
+  ]);
+
+  myPlayer.addEventListener(amp.eventName.loadedmetadata, function () {
+
+var stream = myPlayer.currentVideoStreamList().streams ? myPlayer.currentVideoStreamList().streams[0] : undefined; 
+stream.selectTrackByIndex(-1);
+//         if (stream && $("#fixedBitrate").val() == "true") {
+//              var midTrack = Math.floor(stream.tracks.length / 2);
+
+//             stream.selectTrackByIndex(midTrack);
+//          }
+ });
+
+</script>
+    </body>
+
+</html>
