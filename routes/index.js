@@ -9,11 +9,11 @@ var app = express();
 
 // app.use(cors());
 
-// router.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
+ router.use(function(req, res, next) {
+   res.header("Access-Control-Allow-Origin", "*");
+   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   next();
+ });
 
 
 /* GET home page. */
@@ -32,8 +32,8 @@ router.get('/vast', function(req, res, next) {
     console.log("filepath = " + filePath);
     var stat = fileSystem.statSync(filePath);
 
-    // res.header("Access-Control-Allow-Origin", "*");
-    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
     res.writeHead(200, {
         'Content-Type': 'text/xml',
