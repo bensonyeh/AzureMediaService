@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VAST version="3.0">
+  <Ad id="de0543d6d4aac3fd5fab8530f0d149e4">
+    <InLine>
+      <AdSystem version="2.0">CHOCOLABS Video AD Server</AdSystem>
+      <AdTitle><![CDATA[VISA]]></AdTitle>
+      <Description><![CDATA[]]></Description>
+      <Error><![CDATA[http://ad.server.com/error/dot.gif]]></Error>
+      <Impression id="de0543d6d4aac3fd5fab8530f0d149e4"><![CDATA[http://bigdata.chocolabs.com:9001/api/v2/video_ad/impression_tracking?app_id=55c1a365d72eb6b14fe2b07231d91980&chocomember_id=iamchocomember0000000000000001&timestamp=2015-08-20T11%3A27%3A18.944Z&device_id=15c3ac1da8f08a38e027c4745ff2b72e&ad_id=15c3ac1da8f08a38e027c4745ff2b72f&social_id=10202228116698908&social_type=facebook&social_name=jonny&social_email=jonny771001%40yahoo.com.tw&birthday=10%252F01%252F1989&age=25&gender=male&country=Taiwan&city=Taipei&dist=&longitude=121.497660&latitude=25.073030&language=zh-Hant&device=iPad&os=iOS%208.0.2&version=2.2.17&carrier=%25E4%25B8%25AD%25E8%258F%25AF%25E9%259B%25BB%25E4%25BF%25A1&connection=4G&backup1=&backup2=&ad_type=video_ad&line_id=de0543d6d4aac3fd5fab8530f0d149e4&action=impression&progress=0&percentage=&tag=&account_id=&position_id=&category=%E9%A3%9F%E5%93%81%E9%A1%9E&campaign=&log_timestamp=2015-10-27T11%3A06%3A36.121Z]]></Impression>
+      <Creatives>
+        <Creative>
+          <Linear skipoffset="00:00:05">
+            <Duration>23:59:59</Duration>
+            <TrackingEvents>
+              <Tracking event="skip"><![CDATA[http://bigdata.chocolabs.com:9001/api/v2/video_ad/click_tracking?app_id=55c1a365d72eb6b14fe2b07231d91980&chocomember_id=iamchocomember0000000000000001&timestamp=2015-08-20T11%3A27%3A18.944Z&device_id=15c3ac1da8f08a38e027c4745ff2b72e&ad_id=15c3ac1da8f08a38e027c4745ff2b72f&social_id=10202228116698908&social_type=facebook&social_name=jonny&social_email=jonny771001%40yahoo.com.tw&birthday=10%252F01%252F1989&age=25&gender=male&country=Taiwan&city=Taipei&dist=&longitude=121.497660&latitude=25.073030&language=zh-Hant&device=iPad&os=iOS%208.0.2&version=2.2.17&carrier=%25E4%25B8%25AD%25E8%258F%25AF%25E9%259B%25BB%25E4%25BF%25A1&connection=4G&backup1=&backup2=&ad_type=video_ad&line_id=de0543d6d4aac3fd5fab8530f0d149e4&action=skip&progress=0&percentage=&tag=&account_id=&position_id=&category=%E9%A3%9F%E5%93%81%E9%A1%9E&campaign=&log_timestamp=2015-10-27T11%3A06%3A36.121Z]]></Tracking>
+            </TrackingEvents>
+            <VideoClicks>
+              <ClickThrough id=""><![CDATA[http://www.chocolabs.com]]></ClickThrough>
+              <ClickTracking id=""><![CDATA[http://bigdata.chocolabs.com:9001/api/v2/video_ad/click_tracking?app_id=55c1a365d72eb6b14fe2b07231d91980&chocomember_id=iamchocomember0000000000000001&timestamp=2015-08-20T11%3A27%3A18.944Z&device_id=15c3ac1da8f08a38e027c4745ff2b72e&ad_id=15c3ac1da8f08a38e027c4745ff2b72f&social_id=10202228116698908&social_type=facebook&social_name=jonny&social_email=jonny771001%40yahoo.com.tw&birthday=10%252F01%252F1989&age=25&gender=male&country=Taiwan&city=Taipei&dist=&longitude=121.497660&latitude=25.073030&language=zh-Hant&device=iPad&os=iOS%208.0.2&version=2.2.17&carrier=%25E4%25B8%25AD%25E8%258F%25AF%25E9%259B%25BB%25E4%25BF%25A1&connection=4G&backup1=&backup2=&ad_type=video_ad&line_id=de0543d6d4aac3fd5fab8530f0d149e4&action=click&progress=0&percentage=&tag=&account_id=&position_id=&category=%E9%A3%9F%E5%93%81%E9%A1%9E&campaign=&log_timestamp=2015-10-27T11%3A06%3A36.121Z]]></ClickTracking>
+            </VideoClicks>
+            <MediaFiles>
+              <MediaFile type="video/mp4" width="640" height="360" delivery="progressive" id="de0543d6d4aac3fd5fab8530f0d149e4" bitrate="320" minBitrate="320" maxBitrate="320" scalable="true" maintainAspectRatio="true" apiFramework="VPAID"><![CDATA[http://184f9.http.hkg02.cdn.softlayer.net/video/videoad/O'SHaRe_icecream.mp4]]></MediaFile>
+            </MediaFiles>
+          </Linear>
+        </Creative>
+      </Creatives>
+    </InLine>
+  </Ad>
+</VAST>

@@ -10,6 +10,7 @@ var intervalTimer;
 var playButton;
 var videoContent;
 var myPlayer;
+var countdownTimer;
 
 function init() {
   videoContent = document.getElementById('azuremediaplayer');
@@ -28,6 +29,10 @@ function init() {
   myPlayer.src([
     {src: "http://demosite.streaming.mediaservices.windows.net/5d20899f-7b6f-46e0-bd6f-3e35de1f4b69/file.ism/Manifest", type: "application/vnd.ms-sstr+xml"}, 
   ]);
+
+  myPlayer.pause();
+
+  // myPlayer.controls = false;
   playButton = document.getElementById('playButton');
   // playButton.addEventListener('click', requestAds);
   requestAds();
@@ -66,7 +71,7 @@ function requestAds() {
   //     'sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&' +
   //     'impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&' +
   //     'cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator=';
-  adsRequest.adTagUrl = 'http://localhost:3000/vast';
+  adsRequest.adTagUrl = document.location + 'vast';
 
   // Specify the linear and nonlinear slot sizes. This helps the SDK to
   // select the correct creative if multiple are returned.
@@ -83,6 +88,8 @@ function onAdsManagerLoaded(adsManagerLoadedEvent) {
   // Get the ads manager.
   var adsRenderingSettings = new google.ima.AdsRenderingSettings();
   adsRenderingSettings.restoreCustomPlaybackStateOnAdBreakComplete = true;
+
+  adsRenderingSettings.uiElements = ['COUNTDOWN'];
   // videoContent should be set to the content video element.
   adsManager = adsManagerLoadedEvent.getAdsManager(
       videoContent, adsRenderingSettings);
@@ -117,9 +124,14 @@ function onAdsManagerLoaded(adsManagerLoadedEvent) {
     adsManager.init(640, 400, google.ima.ViewMode.NORMAL);
     // Call play to start showing the ad. Single video and overlay ads will
     // start at this time; the call will be ignored for ad rules.
+
+    var adContainer = document.getElementById('adContainer');
+    adContainer.style.visibility = "visible";
+
     adsManager.start();
   } catch (adError) {
     // An error may be thrown if there was a problem with the VAST response.
+    showControl();
     myPlayer.play();
   }
 }
@@ -135,6 +147,7 @@ function onAdEvent(adEvent) {
       if (!ad.isLinear()) {
         // Position AdDisplayContainer correctly for overlay.
         // Use ad.width and ad.height.
+        showControl();
         myPlayer.play();
       }
       break;
@@ -151,6 +164,12 @@ function onAdEvent(adEvent) {
             },
             300); // every 300ms
       }
+
+      countdownTimer = setInterval(function() {
+      var timeRemaining = adsManager.getRemainingTime();
+      // Update UI with timeRemaining
+      }, 1000);
+
       break;
     case google.ima.AdEvent.Type.COMPLETE:
       // This event indicates the ad has finished - the video player
@@ -169,7 +188,10 @@ function onAdError(adErrorEvent) {
   // console.log(adErrorEvent.getInnerError());
   console.log(adErrorEvent.getError().getErrorCode());
   console.log(adErrorEvent.getError().getMessage());
-  adsManager.destroy();
+  // adsManager.destroy();
+
+  showControl();
+  myPlayer.play();
 }
 
 function onContentPauseRequested() {
@@ -180,12 +202,31 @@ function onContentPauseRequested() {
 }
 
 function onContentResumeRequested() {
+
+  if (countdownTimer) {
+    clearInterval(countdownTimer);
+  }
+
+  showControl();
+
   myPlayer.play();
   // This function is where you should ensure that your UI is ready
   // to play content. It is the responsibility of the Publisher to
   // implement this function when necessary.
   // setupUIForContent();
 
+}
+
+function showControl() {
+  var player = document.getElementById('azuremediaplayer');
+  var adContainer = document.getElementById('adContainer');
+
+  adContainer.style.visibility = "hidden";
+
+  player.classList.remove('vjs-controls-disabled');
+  player.classList.add('vjs-controls-enabled');
+
+  myPlayer.controls = true;
 }
 
 // Wire UI element references and UI event listeners.
