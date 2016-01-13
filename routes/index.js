@@ -3,7 +3,6 @@ var router = express.Router();
 
 var fileSystem = require('fs');
 var path = require('path');
-var cors = require('cors');
 
 var app = express();
 
