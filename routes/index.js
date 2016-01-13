@@ -18,11 +18,6 @@ var app = express();
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  // var filePath = path.join(__dirname, "../", "public", "xml", "vast.xml");
-  //   console.log("filepath = " + filePath);
-  //   var stat = fileSystem.statSync(filePath);
-  //   console.log("stat = " + stat);
-  //   return "123";
   res.render('index', { title: 'Express' });
 });
 
