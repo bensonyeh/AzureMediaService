@@ -12,19 +12,26 @@ var videoContent;
 var myPlayer;
 var countdownTimer;
 
+var firstStart = true;
+
 function init() {
   videoContent = document.getElementById('azuremediaplayer');
 
   var myOptions = {
     "nativeControlsForTouch": false,
     "logo": { "enabled": false },
-    autoplay: true,
-    controls: false,
+    autoplay: false,
+    controls: true,
     width: "640",
     height: "400",
     poster: ""
   };
   myPlayer = amp("azuremediaplayer", myOptions);
+
+  myPlayer.addEventListener(amp.eventName.loadedmetadata, _ampEventHandler);
+  myPlayer.addEventListener(amp.eventName.play, _ampEventHandler);
+
+  // myPlayer.addEventListener('click',myFunction,false);
 
   myPlayer.src([
     {src: "http://demosite.streaming.mediaservices.windows.net/5d20899f-7b6f-46e0-bd6f-3e35de1f4b69/file.ism/Manifest", type: "application/vnd.ms-sstr+xml"}, 
@@ -32,9 +39,50 @@ function init() {
 
   myPlayer.pause();
 
+  // var playButton = document.querySelector('.vjs-big-play-button');
+  // playButton.addEventListener('click', myFunction);
+
+  var playButton = document.querySelector('.vjs-big-play-button');
+  var startEvent = ('ontouchstart' in document.documentElement) ? 'touchstart' : 'click';
+  playButton.addEventListener(startEvent, function(e) { console.log('click');});
+  playButton.addEventListener(startEvent, myFunction);
+  playButton.addEventListener('click', myFunction);
+
   // myPlayer.controls = false;
-  playButton = document.getElementById('playButton');
-  // playButton.addEventListener('click', requestAds);
+  // playButton = document.getElementById('playButton');
+  // // playButton.addEventListener('click', requestAds);
+  // // requestAds();
+
+  // // var x = document.getElementsByClassName("vjs-big-play-button");
+  // // x.onclick = myFunction;
+  // document.getElementsByClassName("vjs-text-track-display")[0].onclick=myFunction;
+  // x.addEventListener('click', myFunction);
+}
+
+function _ampEventHandler(evt) {
+      if ("loadedmetadata" == evt.type) {
+
+            // $('#video-viewport').css("opacity", "1");
+            // var x = document.getElementsByClassName("vjs-big-play-button");
+            // // x.onclick = myFunction;
+            // x[0].addEventListener('click', myFunction, false);
+      }
+      // if ("play" == evt.type) {
+      //       // $('#video-viewport').css("opacity", "1");
+      //       if(firstStart) {
+      //         firstStart = false;
+      //         myPlayer.pause();
+      //         requestAds();
+      //       }
+      // }
+      // if ("ended" == evt.type) {
+      //       // myPlayer.play();
+      // }
+}
+
+function myFunction() {
+  myPlayer.play();
+  myPlayer.pause();
   requestAds();
 }
 

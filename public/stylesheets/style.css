@@ -7,6 +7,19 @@ a {
   color: #00B7FF;
 }
 
+.dot {
+    position: absolute;
+    border-radius: 50px;
+    margin-left: -5px; // Half of the width * (-1)
+    margin-top: -5px; // Half of the height * (-1)
+    top: 50%;
+    left: 50%;
+    -webkit-border-radius: 50px;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    z-index: 999999;
+}
+
 #mainContainer {
   position: relative;
   width: 640px;
